@@ -1,0 +1,29 @@
+// create database library:
+create database library;
+
+// create table of all library readers:
+create table readers (
+    -> id int not null auto_increment,
+    -> name varchar(60),
+    -> surname varchar(60),
+    -> age int,
+    -> rate int,
+    -> phone varchar(60),
+    -> email varchar(40),
+    -> primary key(id));
+
+// insert readers into readers table:
+insert into readers (name, surname, age, rate, phone, email)
+    -> values ('Nikolay', 'Nikolaev', 43, 0, '7915879', 'nikolay@gmail.com')
+    -> ,
+    -> ('Petr', 'Petrov', 57, 0, '123456', 'p.petrov@gmail.com'),
+    -> ('Andrey', 'Andreev', 31, 0, '789456', 'avdreevA@gmail.com'),
+    -> ('Masha', 'Mashkova', 27, 3, '56455665', 'mashmash@yandex.ru'),
+    -> ('Katia', 'Katkova', 29, 2, '123654789', 'katkova@yandex.ru');
+
+// show all rows from table readers:
+select * from readers;
+
+// show only women:
+select * from readers
+    -> where surname like '%a';
