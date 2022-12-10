@@ -1,0 +1,81 @@
+First level: Домашняя работа (Две недели по дедлайну должно хватить.)
+Цель данной домашней работы - отработать навыки полученные на последних двух лекциях.
+
+В нашей системе уже есть таблица с пользователями (говорим про библиотечную систему созданную в первом ДЗ).
+Добавить две дополнительных таблицы:
+ 1. Таблица с работниками библиотеки, которые работают с пользователями;
+ 2. Таблица работников библиотеки, которые не работают с пользователями.
+(каждая из этих таблиц должна иметь разный набор полей (часть полей может совпадать, такие как имя фамилия, возраст, но при этом они должны называться в каждой таблице по разному)).
+
+
+1. Написать запрос (UNION), который выведет всех посетителей библиотеки (это все участники всех трех таблиц). Вывести в одной таблице имя, фамилию и возраст посетителей, вывести поле, которое будет обозначать к какому типу работников или пользователей относится данный посетитель.
+
+2. Отобрать из таблицы , которая получилась в результате первого пункта, всех посетителей у которых:
+    а) Возраст больше определенного значения (можно задать самим);
+    б) Фамилия содержит определенное вхождение символов.
+    * а и б , это отдельные запросы. 
+
+3. Написать запрос в котором выбрать всех пользователей!, которые присутствуют в таблице, полученной в пункте 2а, и всех работников которые не работают с пользователями, которые присутствуют в таблице 2б.
+
+
+// create table with customer care personal
+create table customer_staff (
+    -> id int not null auto_increment,
+    -> name varchar(60),
+    -> surname varchar(60),
+    -> age int,
+    -> phone varchar(60),
+    -> position varchar(255),
+    -> remuneration int,
+    -> primary key (id));
+
+// insert personal who work with customers in table customer_staff:
+insert into customer_staff (name, surname, age, phone, position)
+    -> values ('Svetlana', 'Kruglova', 53, '111111', 'Director'),
+    -> ('Ekaterina', 'Gavrilova', 27, '222222', 'Administrator'),
+    -> ('Irina', 'Bystrova', 32, '987777', 'Manager'),
+    -> ('Natalia', 'Rubcova', 35, '987666', 'Manager');
+
+// create table with service personal:
+create table service_staff (
+    -> id int not null auto_increment,
+    -> firstname varchar(60),
+    -> lastname varchar(60),
+    -> age int,
+    -> phone varchar(60),
+    -> position varchar(255),
+    -> salary int,
+    -> primary key (id));
+
+// insert personal in table service_staff:
+insert into service_staff (firstname, lastname, age, phone, position, salary)
+    -> values ('Boris', 'Shashkevich', 40, '789000', 'Engineer', 75000),
+    -> ('Aleksandr', 'Masljakov', 55, '789111', 'Electric', 60000),
+    -> ('Asia', 'Koteeva', 52, '789222', 'Cleaner', 40000);
+
+// show all library's visitors (from all tables: reader, customer_staff and service_staff):
+select name, surname, age, 'reader' as position from readers
+    -> union all
+    -> select name, surname, age, position from customer_staff
+    -> union all
+    -> select firstname, lastname, age, position from service_staff;
+
+// show all library's visitors whose age is more than 50:
+select name, surname, age, 'reader' as position from readers
+    -> where age > 50
+    -> union all
+    -> select name, surname, age, position from customer_staff
+    -> where age > 50
+    -> union all
+    -> select firstname, lastname, age, position from service_staff
+    -> where age > 50;
+
+// show all library's visitors whose surname contains 'va':
+select name, surname, age, 'reader' as position from readers
+    -> where surname like '%va%'
+    -> union all
+    -> select name, surname, age, position from customer_staff
+    -> where surname like '%va%'
+    -> union all
+    -> select firstname, lastname, age, position from service_staff
+    -> where surname like '%va%';
